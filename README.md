@@ -1,6 +1,6 @@
 # Ansible Openstack Infrastructure and Service Deployment
 
-This Ansible Playbook contains templates to deploy:
+This Ansible Template contains files to deploy:
 
 - Network infrastructure (networks, subnets, routers and security groups)
 - Instances 
