@@ -1,0 +1,38 @@
+---
+- name: Preparing environment
+  hosts: all
+  remote_user: cloud-user
+  become: true
+  tasks:
+  - include: tasks/prepare_environment.yml
+  tags: environment
+
+- name: Deploy xxxx services
+  hosts: all
+  become: true
+  tags: [ ]
+  vars:
+#   Include all role vars here
+#    - pdb_env: production
+#    - dashboard_web_env: int
+  roles:
+    - role: [ ]
+      vars:
+      - var1: 
+      - var2: 
+      - var3: 
+      tags: [role_tags]
+    - role: [ ]
+      vars:
+      - var1: 
+      tags: [role_tags]
+
+- name: Enable SELinux
+  hosts: all
+  remote_user: cloud-user
+  become: true
+  tasks:
+    - name: Enable SElinux to finish deployment
+      selinux: 
+        policy: targeted
+        state: enforcing

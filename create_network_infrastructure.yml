@@ -1,0 +1,94 @@
+---
+
+# Creating network infrastructure
+
+- include: tasks/create_network.yml
+  vars:
+    net_name: "management"
+    cidr: "192.168.0.0/24"
+    pool_start: 192.168.0.20
+    pool_end: 192.168.0.150
+    dns_servers:
+    - 8.8.8.8
+    network_routes:
+    - {destination: 10.10.0.0/16,nexthop: 192.168.0.1}
+    - {destination: 192.100.0.0/16,nexthop: 192.168.0.1}
+
+- include: tasks/create_network.yml
+  vars:
+    net_name: "service"
+    cidr: "172.10.0.0/24"
+    pool_start: 172.10.0.20
+    pool_end: 172.10.0.150
+    dns_servers:
+    - 10.10.10.10
+    network_routes:
+    - {destination: 172.10.0.0/24,nexthop: 172.10.0.1}
+
+- include: tasks/create_router.yml
+  vars:
+    router_name: management
+    external_net_name: ext_mgmt
+    net_name: management
+
+- include: tasks/create_router.yml
+  vars:
+    router_name: service
+    external_net_name: ext_inet
+    net_name: service
+
+#  Create  security groups
+
+- include: tasks/create_security_group.yml
+  vars:
+    - name: SSH
+      description: "Security Group for SSH Access"
+
+- include: tasks/create_security_group.yml
+  vars:
+    name: API
+    description: "Security Group for API Access"
+
+- include: tasks/create_security_group.yml
+  vars:
+    name: MONGO
+    description: "Security Group for MONGODB Access"
+
+# Configure Security Groups
+
+- include: tasks/add_rule_sec_group.yml
+  vars:
+    name: SSH
+    protocol: tcp
+    start_port: 22
+    end_port: 22
+    remote_ip_prefix: "0.0.0.0/0"
+
+- include: tasks/add_rule_sec_group.yml
+  vars:
+    name: API
+    protocol: tcp
+    start_port: 443
+    end_port: 443
+
+- include: tasks/add_rule_sec_group.yml
+  vars:
+    name: API
+    protocol: tcp
+    start_port: 4443
+    end_port: 4443
+
+- include: tasks/add_rule_sec_group.yml
+  vars:
+    name: API
+    protocol: tcp
+    start_port: 8182
+    end_port: 8182
+
+- include: tasks/add_rule_sec_group.yml
+  vars:
+    name: MONGO
+    protocol: tcp
+    start_port: 27017
+    end_port: 27017
+    remote_ip_prefix: "172.10.0.0/24"

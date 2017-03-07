@@ -1,0 +1,11 @@
+---
+- name: Creating Infrastructure
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - config.yml
+  tasks:
+  - include: create_network_infrastructure.yml
+  - include: create_instances.yml
+

@@ -1,0 +1,28 @@
+---
+- name: Disable SElinux during deployment
+  selinux: 
+    policy: targeted
+    state: permissive
+
+- name: Disable default route in eth0
+  lineinfile:
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+    line: "DEFROUTE=no"
+    state: present
+  register: gatewaydev
+
+- name: Restart network if modified /etc/sysconfig/network
+  service: 
+    name: network
+    state: restarted
+  when: gatewaydev.changed
+
+- name: Update /etc/hosts
+  lineinfile:
+    dest: /etc/hosts 
+    regexp: '^[0-9\.]+ {{ hostvars[item].ansible_hostname }} {{ hostvars[item].ansible_hostname }}.novalocal.openstacklocal$'
+    line: "{{ hostvars[item].ansible_eth1.ipv4.address }} {{ hostvars[item].ansible_hostname }} {{ hostvars[item].ansible_hostname }}.novalocal {{ hostvars[item].ansible_hostname }}.openstacklocal"
+    state: present
+  when: hostvars[item].ansible_eth1.ipv4.address is defined
+  with_items: "{{ groups['all'] }}"
+  tags: etchosts

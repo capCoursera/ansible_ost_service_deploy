@@ -1,0 +1,30 @@
+---
+- include: tasks/create_instance.yml
+  vars:
+    os_vm_basename: template1
+    flavor: flavor1
+    security_groups: default
+    ansible_host_groups: template1
+      image: image1
+    deployment_group: template1
+    count: 2
+
+- include: tasks/create_instance.yml
+  vars:
+    os_vm_basename: template2
+    flavor: flavor2
+    security_groups: default
+    ansible_host_groups: template2
+      image: image2
+    deployment_group: template2
+    count: 3
+
+- include: tasks/create_instance.yml
+  vars:
+    os_vm_basename: template3
+    flavor: flavor3
+    security_groups: default
+    ansible_host_groups: template3
+      image: image3
+    deployment_group: template3
+    count: 2
