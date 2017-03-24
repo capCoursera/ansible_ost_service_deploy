@@ -21,7 +21,7 @@
     pool_start: 172.10.0.20
     pool_end: 172.10.0.150
     dns_servers:
-    - 10.10.10.10
+    - 8.8.8.8
     network_routes:
     - {destination: 172.10.0.0/24,nexthop: 172.10.0.1}
 
@@ -68,6 +68,13 @@
   vars:
     name: API
     protocol: tcp
+    start_port: 80
+    end_port: 80
+
+- include: tasks/add_rule_sec_group.yml
+  vars:
+    name: API
+    protocol: tcp
     start_port: 443
     end_port: 443
 
@@ -75,15 +82,8 @@
   vars:
     name: API
     protocol: tcp
-    start_port: 4443
-    end_port: 4443
-
-- include: tasks/add_rule_sec_group.yml
-  vars:
-    name: API
-    protocol: tcp
-    start_port: 8182
-    end_port: 8182
+    start_port: 8080
+    end_port: 8080
 
 - include: tasks/add_rule_sec_group.yml
   vars:
