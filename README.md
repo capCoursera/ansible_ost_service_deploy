@@ -21,4 +21,4 @@ create_instances.yml, that deploys X instances
 
 inventory.py: Dynamic Inventory to request information about Openstack instances
 
-platform.yml: Contains template structure to deploy services
+platform.yml: Contains main playbook structure to deploy services
